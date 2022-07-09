@@ -1,8 +1,12 @@
+| :warning: WARNING          |
+|:---------------------------|
+| Currently in beta ...      |
+
 # MQTT2Ravelli:
 Add a way to drive Ravelli’s stove using MQTT with an Esp8266 plugged on to the serial port..
 
-Add home automation on Ravelli's stoves that are using TOUCH remote control.
-![image](./img/touch_remote.jpg)
+Add home automation on Ravelli's stoves that are using TOUCH remote control: ![image](./img/touch_remote.jpg)
+
 This remote can be plugged on the stove, and this project is using the discussion protocole between the remote and the stove.
 So with this project, you will be able to replace the remote control, to drive the stove and collect more details in real time.
 
