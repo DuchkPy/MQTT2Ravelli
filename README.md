@@ -8,7 +8,7 @@ Interested by another protocol, see [Python 2 Ravelli](https://github.com/DuchkP
 # MQTT2Ravelli:
 Add a way to drive Ravelli’s stove using MQTT with an Esp8266 plugged on to the serial port..
 
-Add home automation on Ravelli's stoves that are using TOUCH remote control: ![image](./img/touch_remote.jpg)
+Add home automation on Ravelli's stoves that are using TOUCH remote control: ![touch remote](./Documentation/img/touch_remote.jpg)
 
 This remote can be plugged on the stove, and this project is using the discussion protocole between the remote and the stove.
 So with this project, you will be able to replace the remote control, to drive the stove and collect more details in real time.
@@ -38,7 +38,7 @@ So with this project, you will be able to replace the remote control, to drive t
 3. `ElectronicTemperature` return incorrect temperature
 
 # Schematic:
-![image](./img/Circuit.png?raw=true)
+![Circuit](./Documentation/img/Circuit.png?raw=true)
 
 ## BOM:
 ### Wire harness:
