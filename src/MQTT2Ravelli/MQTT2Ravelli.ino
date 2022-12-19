@@ -22,7 +22,7 @@ const int mqtt_port = 1883;                   // MQTT port
 #include <PubSubClient.h>
 #include "CRC16.h"
 
-consy char* topic_EspStatus = "Ravelli/EspStatus";                          // topic to return indicate ESP status
+const char* topic_EspStatus = "Ravelli/EspStatus";                          // topic to return indicate ESP status
 //Action topics:
 const char* topic_OnOff = "Ravelli/OnOff";                                  // Topic to switch On or Off the stove
 const char* topic_RoomTemp = "Ravelli/RoomTemp";                            // Topic to indicate The room temperature
@@ -49,7 +49,7 @@ PubSubClient client(MQTT2Ravelli);
 void setup() {
   Serial.begin(4800);
   connectWiFi();
-  client.setServer(mqtt_broker, mqtt_port);
+  client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
 }
 
@@ -218,7 +218,7 @@ void FixQuery_FixReply(uint8_t Query[], uint8_t QueryL, uint8_t TReply[], uint8_
 
 void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
   String ReqType = "";
-  uint8_t ReqValue = 0;
+  String ValTemp = "";
 
   // Get request type and if it exist the requested value
   for (int i = 0; i < msgLength; i++) {
@@ -380,7 +380,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
           break;
         }
 
-        client.publish(topic_StoveStatus, MyText);
+        client.publish(topic_StoveStatus, MyText.c_str());
       }
     } else {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
@@ -396,7 +396,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
     for (uint8_t i = 0; i < sizeof(TheoricalReply); i++) Reply[i] = Serial.read();
 
     if (ConfirmChkSum(Reply, sizeof(TheoricalReply))) {
-      client.publish(topic_StoveStatus, String(Reply[8], DEC));
+      client.publish(topic_StoveStatus, String(Reply[8], DEC).c_str());
     } else {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
@@ -411,7 +411,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
     for (uint8_t i = 0; i < sizeof(TheoricalReply); i++) Reply[i] = Serial.read();
 
     if (ConfirmChkSum(Reply, sizeof(TheoricalReply))) {
-      client.publish(topic_HeatingPowerStatus, String(Reply[8], DEC));
+      client.publish(topic_HeatingPowerStatus, String(Reply[8], DEC).c_str());
     } else {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
@@ -426,7 +426,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
     for (uint8_t i = 0; i < sizeof(TheoricalReply); i++) Reply[i] = Serial.read();
 
     if (ConfirmChkSum(Reply, sizeof(TheoricalReply))) {
-      client.publish(topic_FanPowerStatus, String(Reply[8], DEC));
+      client.publish(topic_FanPowerStatus, String(Reply[8], DEC).c_str());
     } else {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
@@ -441,7 +441,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
     for (uint8_t i = 0; i < sizeof(TheoricalReply); i++) Reply[i] = Serial.read();
 
     if (ConfirmChkSum(Reply, sizeof(TheoricalReply))) {
-      client.publish(topic_ScrewLoadingTime, String(Reply[8], DEC));
+      client.publish(topic_ScrewLoadingTime, String(Reply[8], DEC).c_str());
     } else {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
@@ -456,7 +456,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
     for (uint8_t i = 0; i < sizeof(TheoricalReply); i++) Reply[i] = Serial.read();
 
     if (ConfirmChkSum(Reply, sizeof(TheoricalReply))) {
-      client.publish(topic_ScrewLoadingRemaining, String(Reply[8], DEC));
+      client.publish(topic_ScrewLoadingRemaining, String(Reply[8], DEC).c_str());
     } else {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
@@ -471,7 +471,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
     for (uint8_t i = 0; i < sizeof(TheoricalReply); i++) Reply[i] = Serial.read();
 
     if (ConfirmChkSum(Reply, sizeof(TheoricalReply))) {
-      client.publish(topic_PartialCounter, String(((Reply[4] & 0xFF) << 8) + ((Reply[3] & 0xFF) << 0), DEC));
+      client.publish(topic_PartialCounter, String(((Reply[4] & 0xFF) << 8) + ((Reply[3] & 0xFF) << 0), DEC).c_str());
     } else {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
@@ -486,7 +486,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
     for (uint8_t i = 0; i < sizeof(TheoricalReply); i++) Reply[i] = Serial.read();
 
     if (ConfirmChkSum(Reply, sizeof(TheoricalReply))) {
-      client.publish(topic_TotalCounter, String(((Reply[6] & 0xFF) << 8) + ((Reply[5] & 0xFF) << 0), DEC));
+      client.publish(topic_TotalCounter, String(((Reply[6] & 0xFF) << 8) + ((Reply[5] & 0xFF) << 0), DEC).c_str());
     } else {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
@@ -501,7 +501,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
     for (uint8_t i = 0; i < sizeof(TheoricalReply); i++) Reply[i] = Serial.read();
 
     if (ConfirmChkSum(Reply, sizeof(TheoricalReply))) {
-      client.publish(topic_StartupCounter, String(((Reply[8] & 0xFF) << 8) + ((Reply[7] & 0xFF) << 0), DEC));
+      client.publish(topic_StartupCounter, String(((Reply[8] & 0xFF) << 8) + ((Reply[7] & 0xFF) << 0), DEC).c_str());
     } else {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
@@ -516,7 +516,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
     for (uint8_t i = 0; i < sizeof(TheoricalReply); i++) Reply[i] = Serial.read();
 
     if (ConfirmChkSum(Reply, sizeof(TheoricalReply))) {
-      client.publish(topic_ExhaustTemperature, String(Reply[8], DEC));
+      client.publish(topic_ExhaustTemperature, String(Reply[8], DEC).c_str());
     } else {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
@@ -531,7 +531,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
     for (uint8_t i = 0; i < sizeof(TheoricalReply); i++) Reply[i] = Serial.read();
 
     if (ConfirmChkSum(Reply, sizeof(TheoricalReply))) {
-      client.publish(topic_ElectronicTemperature, String(Reply[8], DEC));
+      client.publish(topic_ElectronicTemperature, String(Reply[8], DEC).c_str());
       // To be divided by 2
     } else {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
