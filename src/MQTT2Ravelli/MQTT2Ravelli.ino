@@ -219,11 +219,10 @@ void FixQuery_FixReply(uint8_t Query[], uint8_t QueryL, uint8_t TReply[], uint8_
 void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
   String ReqType = "";
   String ValTemp = "";
-
+  ReqType = msgTopic;
   // Get request type and if it exist the requested value
   for (int i = 0; i < msgLength; i++) {
     ValTemp += ((char)msgPayload[i]);
-    ReqType = msgTopic;
   }
   uint8_t ReqValue = ValTemp.toInt();
   
