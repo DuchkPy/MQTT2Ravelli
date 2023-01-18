@@ -7,11 +7,20 @@
  */
 
 // PARAMETERS
-const char* ssid = "your WiFi network name";  // WiFi SSID
-const char* password = "your WiFi password";  // WiFi Password
-const char* mqtt_server = "192.168.1.103";    // IP Broker MQTT
-const char *mqtt_username = "MQTT username";  // MQTT username
-const char *mqtt_password = "MQTT password";  // MQTT Password
+//const char* ssid = "your WiFi network name";  // WiFi SSID
+//const char* password = "your WiFi password";  // WiFi Password
+//const char* mqtt_server = "192.168.1.103";    // IP Broker MQTT
+//const char *mqtt_username = "MQTT username";  // MQTT username
+//const char *mqtt_password = "MQTT password";  // MQTT Password
+//const int mqtt_port = 1883;                   // MQTT port
+
+const char* ssid = "TIM-BD58_EXT";  // WiFi SSID
+const char* password = "BouscDare58PerlozPSMSole";  // WiFi Password
+//const char* ssid = "OnePlus Nord";  // WiFi SSID
+//const char* password = "abcd1234";  // WiFi Password
+const char* mqtt_server = "172.16.0.136";    // IP Broker MQTT
+const char *mqtt_username = "ravelli";  // MQTT username
+const char *mqtt_password = "qw2sde3Sw";  // MQTT Password
 const int mqtt_port = 1883;                   // MQTT port
 
 //*****------------------------------*****//
@@ -31,23 +40,36 @@ const char* topic_HeatingPower = "Ravelli/HeatingPower";                    // T
 const char* topic_FanPower = "Ravelli/FanPower";                            // Topic to define front fan power (0 to 6)
 const char* topic_ScrewLoading = "Ravelli/ScrewLoading";                    // Topic to empty the fireplace and fill it with fresh pellet
 //Information topics:
-const char* topic_StoveStatus = "Ravelli/StoveStatus";                      // Topic to request the status of the stove
-const char* topic_SetpointTempStatus = "Ravelli/SetpointTempStatus";        // Topic to request the temperature of the target
-const char* topic_HeatingPowerStatus = "Ravelli/HeatingPowerStatus";        // Topic to request the heating power
-const char* topic_FanPowerStatus = "Ravelli/FanPowerStatus";                // Topic to request the fan power
-const char* topic_ScrewLoadingTime = "Ravelli/ScrewLoadingTime";            // Topic to request the loading time (s)
-const char* topic_ScrewLoadingRemaining = "Ravelli/ScrewLoadingRemaining";  // Topic to request the remaning loading time (s)
-const char* topic_PartialCounter = "Ravelli/PartialCounter";                // Topic to request the counter since last maintenance (hr)
-const char* topic_TotalCounter = "Ravelli/TotalCounter";                    // Topic to request the counter since stove installation (hr)
-const char* topic_StartupCounter = "Ravelli/StartupCounter";                // Topic to request the number of start-up
-const char* topic_ExhaustTemperature = "Ravelli/ExhaustTemperature";        // Topic to request the temperature of exhaust gases
-const char* topic_ElectronicTemperature = "Ravelli/ElectronicTemperature";  // Topic to request the temperature of the electronic
+const char* topic_StoveStatus = "Ravelli/StoveStatus";                                // Topic to return the status of the stove
+const char* topic_StoveStatus_Cmnd = "Ravelli/StoveStatus/Cmnd";                      // Topic to request the status of the stove
+const char* topic_SetpointTempStatus = "Ravelli/SetpointTempStatus";                  // Topic to return the temperature of the target
+const char* topic_SetpointTempStatus_Cmnd = "Ravelli/SetpointTempStatus/Cmnd";        // Topic to request the temperature of the target
+const char* topic_HeatingPowerStatus = "Ravelli/HeatingPowerStatus";                  // Topic to return the heating power
+const char* topic_HeatingPowerStatus_Cmnd = "Ravelli/HeatingPowerStatus/Cmnd";        // Topic to request the heating power
+const char* topic_FanPowerStatus = "Ravelli/FanPowerStatus";                          // Topic to return the fan power
+const char* topic_FanPowerStatus_Cmnd = "Ravelli/FanPowerStatus/Cmnd";                // Topic to request the fan power
+const char* topic_ScrewLoadingTime = "Ravelli/ScrewLoadingTime";                      // Topic to return the loading time (s)
+const char* topic_ScrewLoadingTime_Cmnd = "Ravelli/ScrewLoadingTime/Cmnd";            // Topic to request the loading time (s)
+const char* topic_ScrewLoadingRemaining = "Ravelli/ScrewLoadingRemaining";            // Topic to return the remaning loading time (s)
+const char* topic_ScrewLoadingRemaining_Cmnd = "Ravelli/ScrewLoadingRemaining/Cmnd";  // Topic to request the remaning loading time (s)
+const char* topic_PartialCounter = "Ravelli/PartialCounter";                          // Topic to return the counter since last maintenance (hr)
+const char* topic_PartialCounter_Cmnd = "Ravelli/PartialCounter_Cmnd";                // Topic to request the counter since last maintenance (hr)
+const char* topic_TotalCounter = "Ravelli/TotalCounter";                              // Topic to return the counter since stove installation (hr)
+const char* topic_TotalCounter_Cmnd = "Ravelli/TotalCounter/Cmnd";                    // Topic to request the counter since stove installation (hr)
+const char* topic_StartupCounter = "Ravelli/StartupCounter";                          // Topic to return the number of start-up
+const char* topic_StartupCounter_Cmnd = "Ravelli/StartupCounter/Cmnd";                // Topic to request the number of start-up
+const char* topic_ExhaustTemperature = "Ravelli/ExhaustTemperature";                  // Topic to return the temperature of exhaust gases
+const char* topic_ExhaustTemperature_Cmnd = "Ravelli/ExhaustTemperature/Cmnd";        // Topic to request the temperature of exhaust gases
+const char* topic_ElectronicTemperature = "Ravelli/ElectronicTemperature";            // Topic to return the temperature of the electronic
+const char* topic_ElectronicTemperature_Cmnd = "Ravelli/ElectronicTemperature/Cmnd";  // Topic to request the temperature of the electronic
+
 
 WiFiClient MQTT2Ravelli;
 PubSubClient client(MQTT2Ravelli);
 
 void setup() {
   Serial.begin(4800);
+  Serial.swap();
   connectWiFi();
   client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
@@ -62,9 +84,9 @@ void connectWiFi() {
     delay(250);
     // Serial.print(".");
   }
-  // Serial.println("");
-  // Serial.print("WiFi connected on IP address ");
-  // Serial.println(WiFi.localIP());
+   //Serial.println("");
+   //Serial.print("WiFi connected on IP address ");
+   //Serial.println(WiFi.localIP());
 }
 
 void connectMQTT() {
@@ -88,17 +110,17 @@ void connectMQTT() {
   client.subscribe(topic_FanPower);
   client.subscribe(topic_ScrewLoading);
   //Information topics:
-  client.subscribe(topic_StoveStatus);
-  client.subscribe(topic_SetpointTempStatus);
-  client.subscribe(topic_HeatingPowerStatus);
-  client.subscribe(topic_FanPowerStatus);
-  client.subscribe(topic_ScrewLoadingTime);
-  client.subscribe(topic_ScrewLoadingRemaining);
-  client.subscribe(topic_PartialCounter);
-  client.subscribe(topic_TotalCounter);
-  client.subscribe(topic_StartupCounter);
-  client.subscribe(topic_ExhaustTemperature);
-  client.subscribe(topic_ElectronicTemperature);
+  client.subscribe(topic_StoveStatus_Cmnd);
+  client.subscribe(topic_SetpointTempStatus_Cmnd);
+  client.subscribe(topic_HeatingPowerStatus_Cmnd);
+  client.subscribe(topic_FanPowerStatus_Cmnd);
+  client.subscribe(topic_ScrewLoadingTime_Cmnd);
+  client.subscribe(topic_ScrewLoadingRemaining_Cmnd);
+  client.subscribe(topic_PartialCounter_Cmnd);
+  client.subscribe(topic_TotalCounter_Cmnd);
+  client.subscribe(topic_StartupCounter_Cmnd);
+  client.subscribe(topic_ExhaustTemperature_Cmnd);
+  client.subscribe(topic_ElectronicTemperature_Cmnd);
 }
 
 void loop() {
@@ -146,6 +168,9 @@ bool ConfirmChkSum(uint8_t frame[], uint8_t length) {
 // Function to send a variable message and receive a known reply
 void VarQuery_FixReply(uint8_t Query[], uint8_t QueryL, uint8_t TReply[], uint8_t TReplyL) {
   uint8_t Compt = 0;
+  uint8_t ReceivedHexa[TReplyL];
+  String ValTemp_tx = "";
+  String ValTemp_rx = "";
 
   // Get checksum of request and reply
   Query[QueryL] = GetChkSum(Query, QueryL);
@@ -160,11 +185,19 @@ void VarQuery_FixReply(uint8_t Query[], uint8_t QueryL, uint8_t TReply[], uint8_
   delay(50);
 
   // Get reply from stove and compare to theoritical reply
-  for (uint8_t i = 0; i < QueryL; i++) Serial.read();
-  for (uint8_t i = 0; i < TReplyL; i++) {
-    if (Serial.read() != TReply[i]) Compt++;
+  for (uint8_t i = 0; i < QueryL; i++){
+    ReceivedHexa[i] = Serial.read();
+    ValTemp_tx.concat(String(ReceivedHexa[i], HEX));
+    ValTemp_tx.concat("_");
   }
-
+  client.publish(topic_EspStatus, ValTemp_tx.c_str()); //for testing only
+  for (uint8_t i = 0; i < TReplyL; i++) {
+    ReceivedHexa[i] = Serial.read();
+    ValTemp_rx.concat(String(ReceivedHexa[i], HEX));
+    ValTemp_rx.concat("_");
+    if (ReceivedHexa[i] != TReply[i]) Compt++;
+  }
+  client.publish(topic_EspStatus, ValTemp_rx.c_str()); //for testing only
   // Send back the status to python
   if (Compt == 0) {
     client.publish(topic_EspStatus, "ok");
@@ -192,6 +225,8 @@ void FixQuery_VarReply(uint8_t Query[], uint8_t QueryL) {
 void FixQuery_FixReply(uint8_t Query[], uint8_t QueryL, uint8_t TReply[], uint8_t TReplyL) {
   uint8_t ReceivedHexa[TReplyL];
   uint8_t Compt = 0;
+  String ValTemp_tx = "";
+  String ValTemp_rx = "";
 
   // Purge remaining data on buffer
   while (Serial.available() > 0) Serial.read();
@@ -202,9 +237,19 @@ void FixQuery_FixReply(uint8_t Query[], uint8_t QueryL, uint8_t TReply[], uint8_
   delay(50);
 
   // Get reply from stove and compare to theoritical reply
-  for (uint8_t i = 0; i < QueryL; i++) Serial.read();
-  for (uint8_t i = 0; i < TReplyL; i++) ReceivedHexa[i] = Serial.read();
+  for (uint8_t i = 0; i < QueryL; i++){
+    ReceivedHexa[i] = Serial.read();
+    ValTemp_tx.concat(String(ReceivedHexa[i], HEX));
+    ValTemp_tx.concat("_");
+  }
 
+  client.publish(topic_EspStatus, ValTemp_tx.c_str()); //for testing only
+  for (uint8_t i = 0; i < TReplyL; i++){
+    ReceivedHexa[i] = Serial.read();
+    ValTemp_rx.concat(String(ReceivedHexa[i], HEX));
+    ValTemp_rx.concat("_");
+  }
+  client.publish(topic_EspStatus, ValTemp_rx.c_str()); //for testing only
   for (uint8_t i = 0; i < TReplyL; i++) {
     if (ReceivedHexa[i] != TReply[i]) Compt++;
   }
@@ -220,6 +265,9 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
   String ReqType = "";
   String ValTemp = "";
   ReqType = msgTopic;
+  String ValTemp_tx_call = "";
+  String ValTemp_rx_call = "";
+
   // Get request type and if it exist the requested value
   for (int i = 0; i < msgLength; i++) {
     ValTemp += ((char)msgPayload[i]);
@@ -299,7 +347,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
     }
   }
   // Information items:
-  else if (ReqType == topic_StoveStatus) { // Request stove status
+  else if (ReqType == topic_StoveStatus_Cmnd) { // Request stove status
     String MyText = "Stove status: ";
 
     uint8_t PreQuery[] = {0x21, 0x00, 0x10, 0x07, 0x04, 0x38, 0x95};
@@ -307,8 +355,18 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
     uint8_t Reply[sizeof(TheoricalReply)];
 
     FixQuery_VarReply(PreQuery, sizeof(PreQuery));
-    for (uint8_t i = 0; i < sizeof(PreQuery); i++) Serial.read();
-    for (uint8_t i = 0; i < sizeof(TheoricalReply); i++) Reply[i] = Serial.read();
+    for (uint8_t i = 0; i < sizeof(PreQuery); i++){
+      Reply[i] = Serial.read();
+      ValTemp_tx_call.concat(String(Reply[i], HEX));
+      ValTemp_tx_call.concat("_");
+    }
+    client.publish(topic_EspStatus, ValTemp_tx_call.c_str()); //for testing only
+    for (uint8_t i = 0; i < sizeof(TheoricalReply); i++){
+      Reply[i] = Serial.read();
+      ValTemp_rx_call.concat(String(Reply[i], HEX));
+      ValTemp_rx_call.concat("_");
+    }
+    client.publish(topic_EspStatus, ValTemp_rx_call.c_str()); //for testing only
     if (ConfirmChkSum(Reply, sizeof(TheoricalReply))) {
       if (Reply[0] == 0) {
         client.publish(topic_EspStatus, "ERROR: incorrect stove response");
@@ -385,22 +443,33 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
   }
-  else if (ReqType == topic_SetpointTempStatus) { // Request registered setpoint temperature (°C)
+  else if (ReqType == topic_SetpointTempStatus_Cmnd) { // Request registered setpoint temperature (°C)
     uint8_t PreQuery[] = {0x21, 0x00, 0x01, 0x00, 0x53, 0xFF, 0x43};
     uint8_t TheoricalReply[] = {0x11, 0x00, 0x01, 0x00, 0x53, 0x1f, 0x07, 0x29, 0xAA, 0x00, 0x00};
     uint8_t Reply[sizeof(TheoricalReply)];
 
     FixQuery_VarReply(PreQuery, sizeof(PreQuery));
-    for (uint8_t i = 0; i < sizeof(PreQuery); i++) Serial.read();
-    for (uint8_t i = 0; i < sizeof(TheoricalReply); i++) Reply[i] = Serial.read();
+    for (uint8_t i = 0; i < sizeof(PreQuery); i++){
+      Reply[i] = Serial.read();
+      ValTemp_tx_call.concat(String(Reply[i], HEX));
+      ValTemp_tx_call.concat("_");
+    }
+
+    client.publish(topic_EspStatus, ValTemp_tx_call.c_str()); //for testing only
+    for (uint8_t i = 0; i < sizeof(TheoricalReply); i++){
+      Reply[i] = Serial.read();
+      ValTemp_rx_call.concat(String(Reply[i], HEX));
+      ValTemp_rx_call.concat("_");
+    }
+    client.publish(topic_EspStatus, ValTemp_rx_call.c_str()); //for testing only
 
     if (ConfirmChkSum(Reply, sizeof(TheoricalReply))) {
-      client.publish(topic_StoveStatus, String(Reply[8], DEC).c_str());
+      client.publish(topic_SetpointTempStatus, String(Reply[8], DEC).c_str());
     } else {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
   }
-  else if (ReqType == topic_HeatingPowerStatus) { // Request current heating power
+  else if (ReqType == topic_HeatingPowerStatus_Cmnd) { // Request current heating power
     uint8_t PreQuery[] = {0x21, 0x00, 0x01, 0x00, 0x52, 0xEF, 0x62};
     uint8_t TheoricalReply[] = {0x11, 0x00, 0x01, 0x00, 0x52, 0x05, 0x01, 0x05, 0xAA, 0x00, 0x00};
     uint8_t Reply[sizeof(TheoricalReply)];
@@ -415,7 +484,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
   }
-  else if (ReqType == topic_FanPowerStatus) { // Request current fan power
+  else if (ReqType == topic_FanPowerStatus_Cmnd) { // Request current fan power
     uint8_t PreQuery[] = {0x21, 0x00, 0x01, 0x00, 0x58, 0x4E, 0x28};
     uint8_t TheoricalReply[] = {0x11, 0x00, 0x01, 0x00, 0x58, 0x22, 0x00, 0x06, 0xAA, 0x00, 0x00};
     uint8_t Reply[sizeof(TheoricalReply)];
@@ -430,7 +499,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
   }
-  else if (ReqType == topic_ScrewLoadingTime) { // Request loading time (s)
+  else if (ReqType == topic_ScrewLoadingTime_Cmnd) { // Request loading time (s)
     uint8_t PreQuery[] = {0x21, 0x00, 0x10, 0x0b, 0x01, 0x2D, 0x5D};
     uint8_t TheoricalReply[] = {0x11, 0x00, 0x10, 0x0b, 0x01, 0xAA, 0x00, 0x00};
     uint8_t Reply[sizeof(TheoricalReply)];
@@ -445,14 +514,24 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
   }
-  else if (ReqType == topic_ScrewLoadingRemaining) { // Request remaining loading time (s)
+  else if (ReqType == topic_ScrewLoadingRemaining_Cmnd) { // Request remaining loading time (s)
     uint8_t PreQuery[] = {0x21, 0x00, 0x10, 0x0a, 0x02, 0x2E, 0x0F};
     uint8_t TheoricalReply[] = {0x11, 0x00, 0x10, 0x0a, 0x02, 0x00, 0xAA, 0x00, 0x00};
     uint8_t Reply[sizeof(TheoricalReply)];
 
     FixQuery_VarReply(PreQuery, sizeof(PreQuery));
-    for (uint8_t i = 0; i < sizeof(PreQuery); i++) Serial.read();
-    for (uint8_t i = 0; i < sizeof(TheoricalReply); i++) Reply[i] = Serial.read();
+    for (uint8_t i = 0; i < sizeof(PreQuery); i++){
+      Reply[i] = Serial.read();
+      ValTemp_tx_call.concat(String(Reply[i], HEX));
+      ValTemp_tx_call.concat("_");
+    }
+    client.publish(topic_EspStatus, ValTemp_tx_call.c_str()); //for testing only
+    for (uint8_t i = 0; i < sizeof(TheoricalReply); i++){
+      Reply[i] = Serial.read();
+      ValTemp_rx_call.concat(String(Reply[i], HEX));
+      ValTemp_rx_call.concat("_");
+    }
+    client.publish(topic_EspStatus, ValTemp_rx_call.c_str()); //for testing only
 
     if (ConfirmChkSum(Reply, sizeof(TheoricalReply))) {
       client.publish(topic_ScrewLoadingRemaining, String(Reply[8], DEC).c_str());
@@ -460,7 +539,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
   }
-  else if (ReqType == topic_PartialCounter) { // Requestpartial counter (h)
+  else if (ReqType == topic_PartialCounter_Cmnd) { // Requestpartial counter (h)
     uint8_t PreQuery[] = {0x21, 0x00, 0x06, 0xD1, 0x30};
     uint8_t TheoricalReply[] = {0x11, 0x00, 0x06, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0x00, 0x00};
     uint8_t Reply[sizeof(TheoricalReply)];
@@ -475,7 +554,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
   }
-  else if (ReqType == topic_TotalCounter) { // Request total counter (h)
+  else if (ReqType == topic_TotalCounter_Cmnd) { // Request total counter (h)
     uint8_t PreQuery[] = {0x21, 0x00, 0x06, 0xD1, 0x30};
     uint8_t TheoricalReply[] = {0x11, 0x00, 0x06, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0x00, 0x00};
     uint8_t Reply[sizeof(TheoricalReply)];
@@ -490,7 +569,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
   }
-  else if (ReqType == topic_StartupCounter) { // Request number of start-up
+  else if (ReqType == topic_StartupCounter_Cmnd) { // Request number of start-up
     uint8_t PreQuery[] = {0x21, 0x00, 0x06, 0xD1, 0x30};
     uint8_t TheoricalReply[] = {0x11, 0x00, 0x06, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0x00, 0x00};
     uint8_t Reply[sizeof(TheoricalReply)];
@@ -505,7 +584,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
   }
-  else if (ReqType == topic_ExhaustTemperature) { // Request temperature of exhaust gases
+  else if (ReqType == topic_ExhaustTemperature_Cmnd) { // Request temperature of exhaust gases
     uint8_t PreQuery[] = {0x21, 0x00, 0x10, 0x1e, 0x02, 0xE1, 0xB8};
     uint8_t TheoricalReply[] = {0x11, 0x00, 0x10, 0x1e, 0x02, 0xAA, 0x00, 0x00};
     uint8_t Reply[sizeof(TheoricalReply)];
@@ -520,7 +599,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
   }
-  else if (ReqType == topic_ElectronicTemperature) { // Request temperature of the electronic
+  else if (ReqType == topic_ElectronicTemperature_Cmnd) { // Request temperature of the electronic
     uint8_t PreQuery[] = {0x21, 0x00, 0x10, 0x12, 0x01, 0x94, 0xB6};
     uint8_t TheoricalReply[] = {0x11, 0x00, 0x10, 0x12, 0x01, 0xAA, 0x00, 0x00};
     uint8_t Reply[sizeof(TheoricalReply)];
@@ -535,6 +614,7 @@ void callback(char *msgTopic, byte *msgPayload, unsigned int msgLength) {
     } else {
       client.publish(topic_EspStatus, "ERROR: incorrect stove response");
     }
-  } else
+  }
+  else
     client.publish(topic_EspStatus, "ERROR: request not recognized");
 }
