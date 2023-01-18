@@ -7,20 +7,11 @@
  */
 
 // PARAMETERS
-//const char* ssid = "your WiFi network name";  // WiFi SSID
-//const char* password = "your WiFi password";  // WiFi Password
-//const char* mqtt_server = "192.168.1.103";    // IP Broker MQTT
-//const char *mqtt_username = "MQTT username";  // MQTT username
-//const char *mqtt_password = "MQTT password";  // MQTT Password
-//const int mqtt_port = 1883;                   // MQTT port
-
-const char* ssid = "TIM-BD58_EXT";  // WiFi SSID
-const char* password = "BouscDare58PerlozPSMSole";  // WiFi Password
-//const char* ssid = "OnePlus Nord";  // WiFi SSID
-//const char* password = "abcd1234";  // WiFi Password
-const char* mqtt_server = "172.16.0.136";    // IP Broker MQTT
-const char *mqtt_username = "ravelli";  // MQTT username
-const char *mqtt_password = "qw2sde3Sw";  // MQTT Password
+const char* ssid = "your WiFi network name";  // WiFi SSID
+const char* password = "your WiFi password";  // WiFi Password
+const char* mqtt_server = "192.168.1.103";    // IP Broker MQTT
+const char *mqtt_username = "MQTT username";  // MQTT username
+const char *mqtt_password = "MQTT password";  // MQTT Password
 const int mqtt_port = 1883;                   // MQTT port
 
 //*****------------------------------*****//
