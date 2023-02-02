@@ -48,9 +48,10 @@ So with this project, you will be able to replace the remote control, to drive t
 
 ### Board:
 - 1x Diode (D1): 1N4148
-- 1x Transistor (Q1): BC109
+- 1x Transistor (Q1): 2N222
 - 1x Resistance (R1): 10 kΩ
-- 1x NAND gate: HCF4011BE, could be replace by a NOR GATE HCF4001BE (not tested yet)
+- 1x Resistance (R2): 1 kΩ
+- 1x NAND gate: 74ACT00, could be replace by a NOR  or NOT GATE  (not tested yet)
 - 1x ESP8266, Wemos D1 mini or NodeMCU (not tested yet)
 - 1x 3 wire connector if on a proto board
 
